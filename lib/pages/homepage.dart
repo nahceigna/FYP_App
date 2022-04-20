@@ -1,17 +1,17 @@
 /// import libraries
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:fyp_app/componenets/datetime.dart';
-import 'package:fyp_app/componenets/display_no_of_ppl.dart';
+import 'package:fyp_app/components/datetime.dart';
+import 'package:fyp_app/components/display_no_of_ppl.dart';
 import 'package:fyp_app/services/occupancy_data.dart';
 import 'package:fyp_app/services/world_time.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:fyp_app/componenets/piechart.dart';
-import 'package:fyp_app/componenets/barchart.dart';
-import 'package:fyp_app/componenets/location_dropdown_menu.dart';
-import 'package:fyp_app/componenets/day_choice_chip.dart';
-import 'package:fyp_app/componenets/situation.dart';
-import 'package:fyp_app/componenets/situation_card.dart';
+import 'package:fyp_app/components/piechart.dart';
+import 'package:fyp_app/components/barchart.dart';
+import 'package:fyp_app/components/location_dropdown_menu.dart';
+import 'package:fyp_app/components/day_choice_chip.dart';
+import 'package:fyp_app/components/situation.dart';
+import 'package:fyp_app/components/situation_card.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
