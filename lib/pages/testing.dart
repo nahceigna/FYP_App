@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fyp_app/componenets/day_choice_chip.dart';
+import 'package:fyp_app/components/day_choice_chip.dart';
 
 class TestingPage extends StatefulWidget {
   const TestingPage({Key? key}) : super(key: key);
