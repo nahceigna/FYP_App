@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_app/services/occupancy_data.dart';
-import 'package:fyp_app/services/world_time.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class Loading extends StatefulWidget {
@@ -16,9 +15,6 @@ class _LoadingState extends State<Loading> {
 
   void setupData() async {
     /// Get data online
-    /// Get online clock
-    WorldTime timeData = WorldTime();
-    await timeData.getTime();
 
     /// get data online
     OccupancyDataJSON occupancy = OccupancyDataJSON();
@@ -29,11 +25,8 @@ class _LoadingState extends State<Loading> {
       context,
       '/main',
       arguments: <String, dynamic>{
-        'time': timeData.time,
-        'date': timeData.date,
-        'hour': timeData.hour,
-        'day': timeData.day,
-        'updateTime': timeData.updateTime,
+        'hour': occupancy.hour,
+        'updateTime': occupancy.updateTime,
         'occupied': occupancy.occupied,
         'available': occupancy.available,
       },

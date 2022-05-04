@@ -11,7 +11,7 @@ final List<String> locations = [
   'LG4',
 ];
 
-String? selectedLocation;
+String selectedLocation = "Overall";
 
 /// Build dropdown menu
 DropdownMenuItem<String> buildLocationMenuItem(String location) =>

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:fyp_app/components/datetime.dart';
 import 'package:fyp_app/components/display_no_of_ppl.dart';
 import 'package:fyp_app/services/occupancy_data.dart';
-import 'package:fyp_app/services/world_time.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:fyp_app/components/piechart.dart';
 import 'package:fyp_app/components/barchart.dart';
@@ -23,14 +22,12 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   /// variables
   Map data = {
-    'time': 'time',
-    'date': 'date',
     'hour': 'hour',
-    'day': 'Monday',
     'updateTime': 'Not yet update',
     'occupied': 0,
     'available': 3217,
   };
+
   late TooltipBehavior _tooltipBehavior;
   bool isSelected = false;
   String selectedDay = 'Monday';
@@ -41,41 +38,18 @@ class _HomepageState extends State<Homepage> {
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
-  void setupOccupancyData() async {
-    /// get data online
-    OccupancyDataJSON instance = OccupancyDataJSON();
-    await instance.getOccupancy();
-    data['occupied'] = instance.occupied;
-    data['available'] = instance.available;
-  }
-
-  void setupWorldTime() async {
-    /// Get data online
-    /// Get online clock
-    WorldTime instance = WorldTime();
-    await instance.getTime();
-    data['time'] = instance.time;
-    data['date'] = instance.date;
-    data['hour'] = instance.hour;
-    data['day'] = instance.day;
-    data['updateTime'] = instance.updateTime;
-  }
-
   Future<void> refreshPageJSON() async {
     debugPrint('Refreshing Page');
     OccupancyDataJSON occupancyInstance = OccupancyDataJSON();
     await occupancyInstance.getOccupancy();
-    WorldTime timeInstance = WorldTime();
-    await timeInstance.getTime();
+    // WorldTime timeInstance = WorldTime();
+    // await timeInstance.getTime();
 
     return setState(() => {
           data['occupied'] = occupancyInstance.occupied,
           data['available'] = occupancyInstance.available,
-          data['time'] = timeInstance.time,
-          data['date'] = timeInstance.date,
-          data['hour'] = timeInstance.hour,
-          data['day'] = timeInstance.hour,
-          data['updateTime'] = timeInstance.updateTime,
+          data['hour'] = occupancyInstance.hour,
+          data['updateTime'] = occupancyInstance.updateTime,
         });
   }
 
@@ -164,7 +138,7 @@ class _HomepageState extends State<Homepage> {
             value: selectedLocation,
             onChanged: (location) => setState(() => {
                   displayLocaton = location.toString(),
-                  selectedLocation = location.toString()
+                  selectedLocation = location.toString(),
                 }),
           ),
         ),
@@ -175,6 +149,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
+    refreshPageJSON();
     _tooltipBehavior = TooltipBehavior(enable: true);
   }
 
@@ -184,6 +159,7 @@ class _HomepageState extends State<Homepage> {
     if (ModalRoute.of(context)!.settings.arguments != null) {
       data = ModalRoute.of(context)!.settings.arguments as Map;
     }
+
     return Scaffold(
       /// App bar
       appBar: AppBar(
@@ -235,8 +211,8 @@ class _HomepageState extends State<Homepage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   StreamBuilder(
-                    stream: Stream.periodic(const Duration(minutes: 3))
-                        .asyncMap((i) => setupOccupancyData()),
+                    stream: Stream.periodic(const Duration(seconds: 10))
+                        .asyncMap((i) => refreshPageJSON()),
                     builder: (context, snapshot) => Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -314,8 +290,8 @@ class _HomepageState extends State<Homepage> {
 
                   /// Insert status
                   StreamBuilder(
-                    stream: Stream.periodic(const Duration(minutes: 10))
-                        .asyncMap((i) => setupWorldTime()),
+                    stream: Stream.periodic(const Duration(minutes: 1))
+                        .asyncMap((i) => refreshPageJSON()),
                     builder: (context, snapshot) => situationTemplate(
                         (data['occupied'] / 3217 * 100).toInt(), data['hour']),
                   ),
@@ -324,8 +300,8 @@ class _HomepageState extends State<Homepage> {
                   const SizedBox(height: 5.0),
 
                   StreamBuilder(
-                    stream: Stream.periodic(const Duration(minutes: 3))
-                        .asyncMap((i) => setupOccupancyData()),
+                    stream: Stream.periodic(const Duration(seconds: 10))
+                        .asyncMap((i) => refreshPageJSON()),
                     builder: (context, snapshot) =>
                         lastUpdated(data['updateTime']),
                   ),

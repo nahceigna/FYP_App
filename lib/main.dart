@@ -1,5 +1,6 @@
 /// import libraries
 import 'package:flutter/material.dart';
+import 'package:fyp_app/pages/homepage.dart';
 import 'package:fyp_app/pages/loading.dart';
 import 'package:fyp_app/pages/onboarding.dart';
 import 'package:fyp_app/routes.dart';
